@@ -1,25 +1,38 @@
+"use client";
+import { useRouter } from "next/navigation";
 import React from "react";
-
+import { signOut } from "firebase/auth";
+import { auth } from "@/Firebase";
 const Home = () => {
+  const router = useRouter();
+  const logoutUser = async () => {
+    localStorage.clear();
+    try {
+      await signOut(auth);
+      window.location.href = "/";
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  if (localStorage.getItem("authenticated") === "false") {
+    router.push("/");
+  }
   return (
-    <div className="flex flex-col mt-14 w-full gap-6 justify-center items-center">
+    <div className="flex flex-col w-full h-screen gap-6 justify-center items-center">
       <div className="flex flex-col justify-center gap-4">
         <div className="flex rounded-2xl flex-col items-center mx-auto">
-          <form className="flex flex-col text-black px-10 py-6 gap-4">
-            <div className="flex flex-col justify-between gap-2">
-              <h1 className="text-[16px] font-lato leading-[19.2px]">
-                Email Address
-              </h1>
-              <input
-                className="bg-[#EAEAEA] w-[280px] sm:w-[325px] h-[40px] px-6 rounded-xl"
-                placeholder="Email..."
-              />
+          <div className="flex flex-col justify-between w-full rounded-lg py-6 gap-4">
+            <div className="bg-gray-700 opacity-90 p-4 text-white-500 text-center text-base font-semibold">
+              dhrumishah951@gmail.com
             </div>
-
-            <button className="bg-[#4285F4] rounded-xl w-[280px] sm:w-[325px] h-[40px] font-bold text-white">
-              Logout
-            </button>
-          </form>
+          </div>
+          <button
+            className="bg-[#4285F4] rounded-xl w-72 sm:w-80 h-10 font-bold text-white"
+            onClick={logoutUser}
+          >
+            Logout
+          </button>
         </div>
       </div>
     </div>
